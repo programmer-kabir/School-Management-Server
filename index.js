@@ -177,8 +177,9 @@ async function run() {
     } )
 
     // BookMark Section
-    app.post("/bookmark", async (req, res) => {
+    app.post("/booked", async (req, res) => {
       const body = req.body.saveData;
+      console.log(body);
       const id = body.id;
       const filter = { id: id };
 
@@ -189,13 +190,18 @@ async function run() {
         const result = await bookMarkCollection.insertOne(body);
         res.send(result);
       }  
-      console.log("Checking for ID:", id);
-
-      console.log(data);    
+   
     });
 
-    app.get('/bookmark', async(req, res) =>{
-      const result = await bookMarkCollection.find().toArray();
+    app.get('/booked', async(req, res) =>{
+      const userEmail = req.query.userEmail;
+      console.log(userEmail);
+      if(!userEmail){
+        res.send([])
+      }
+      const query = { userEmail:userEmail  };
+      console.log(query);
+      const result = await bookMarkCollection.find(query).toArray();
       res.send(result);
     })
 
