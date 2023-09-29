@@ -253,7 +253,7 @@ async function run() {
       });
     });
 
-    // Payment Relate
+    
     app.post("/payments", async (req, res) => {
       try {
           const payment = req.body;
@@ -281,9 +281,17 @@ async function run() {
   
 
     app.get("/payment", async (req, res) => {
-      const result = await PaymentCollection.find().toArray();
+      const email = req.query.email
+      console.log(email);
+      if (!email) {
+        res.send([]);
+      }
+      const query = { email: email };
+      const result = await PaymentCollection.find(query).toArray();
       res.send(result);
     });
+
+
     // const tran_id = new ObjectId().toString();
     // app.post("/order", async (req, res) => {
     //   const classes = req.body;
@@ -296,7 +304,7 @@ async function run() {
     //     total_amount: 100,
     //     currency: classes?.currency,
     //     trans_id: tran_id, // use unique tran_id for each api call
-    //     success_url: `https://server-kabi-r.vercel.app/payment/success/${tran_id}`,
+    //     success_url: `http://localhost:5000/payment/success/${tran_id}`,
     //     fail_url: "http://localhost:3030/fail",
     //     cancel_url: "http://localhost:3030/cancel",
     //     ipn_url: "http://localhost:3030/ipn",
